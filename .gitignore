@@ -14,3 +14,4 @@ Gemfile.lock
 .rspec_status
 
 .ruby-version
+!/sample/Gemfile.lock
