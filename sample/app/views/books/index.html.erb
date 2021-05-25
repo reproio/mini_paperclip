@@ -2,7 +2,7 @@
 <p>Find me in app/views/books/index.html.erb</p>
 <ul>
   <% @books.each do |book| %>
-    <li><%= book.title %></li>
+    <li><%= book.title %>, <%= image_tag book.image.url %></li>
 
   <% end %>
 </ul>
