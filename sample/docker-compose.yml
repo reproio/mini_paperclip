@@ -12,6 +12,11 @@ services:
       - .:/mini_paperclip/app
     ports:
       - "9000:3000"
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_DEFAULT_REGION: ${AWS_REGION}
+      AWS_S3_BUCKET: ${AWS_S3_BUCKET}
   db:
     image: postgres:13.2
     environment:
