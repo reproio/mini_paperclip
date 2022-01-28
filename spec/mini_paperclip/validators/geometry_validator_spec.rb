@@ -4,14 +4,11 @@ RSpec.describe MiniPaperclip::Validators::GeometryValidator do
       attributes: :img,
       width: { less_than_or_equal_to: 1000 },
     )
-    Tempfile.create(['spec']) do |f|
-      f.binmode
-      mock = double('Record')
-      attachment = double('Attachment')
-      allow(attachment).to receive(:waiting_write_file).and_return(f)
-      expect(mock).to_not receive(:errors)
-      validator.validate_each(mock, :img, attachment)
-    end
+    mock = double('Record')
+    attachment = double('Attachment')
+    allow(attachment).to receive(:waiting_write_file).and_return(StringIO.new)
+    expect(mock).to_not receive(:errors)
+    validator.validate_each(mock, :img, attachment)
   end
 
   it "#validate_each with valid geometry width" do
