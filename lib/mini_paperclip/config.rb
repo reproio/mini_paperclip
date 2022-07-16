@@ -15,6 +15,7 @@ module MiniPaperclip
     :s3_bucket_name,
     :s3_acl,
     :s3_cache_control,
+    :s3_client_options,
     :interpolates,
     :keep_old_files,
     :read_timeout,
