@@ -37,6 +37,7 @@ module MiniPaperclip
         keep_old_files: false,
         read_timeout: 60,
         logger: Logger.new($stdout),
+        s3_client_options: {},
       )
     end
   end

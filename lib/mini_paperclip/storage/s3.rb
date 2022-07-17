@@ -5,7 +5,7 @@ module MiniPaperclip
     class S3 < Base
       def write(style, file)
         debug("writing by S3 to bucket:#{@config.s3_bucket_name},key:#{s3_object_key(style)}")
-        Aws::S3::Client.new.put_object(
+        Aws::S3::Client.new(@config.s3_client_options).put_object(
           acl: @config.s3_acl,
           cache_control: @config.s3_cache_control,
           content_type: @attachment.content_type,
@@ -26,7 +26,7 @@ module MiniPaperclip
       end
 
       def exists?(style)
-        Aws::S3::Client.new.head_object(
+        Aws::S3::Client.new(@config.s3_client_options).head_object(
           bucket: @config.s3_bucket_name,
           key: s3_object_key(style),
         )
@@ -42,7 +42,7 @@ module MiniPaperclip
       def do_delete_files
         return if @deletes.empty?
         debug("deleting by S3 to bucket:#{@config.s3_bucket_name},objects:#{@deletes}")
-        Aws::S3::Client.new.delete_objects(
+        Aws::S3::Client.new(@config.s3_client_options).delete_objects(
           bucket: @config.s3_bucket_name,
           delete: {
             objects: @deletes,
@@ -54,7 +54,7 @@ module MiniPaperclip
       def open(style)
         Tempfile.new(['MiniPaperclip::Storage::S3']).tap do |response_target|
           response_target.binmode
-          Aws::S3::Client.new.get_object(
+          Aws::S3::Client.new(@config.s3_client_options).get_object(
             bucket: @config.s3_bucket_name,
             key: s3_object_key(style),
             response_target: response_target,
