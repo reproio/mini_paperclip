@@ -20,7 +20,7 @@ module MiniPaperclip
       end
 
       def exists?(style)
-        File.exists?(file_path(style))
+        File.exist?(file_path(style))
       end
 
       def push_delete_file(style)

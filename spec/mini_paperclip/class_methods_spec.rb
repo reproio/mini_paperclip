@@ -8,11 +8,11 @@ RSpec.describe MiniPaperclip::ClassMethods do
     record.image = "data:image/png;base64,#{png_1x1_base64}"
     record.image_file_name = 'test.png'
     record.save!
-    expect(File.exists?(record.image.storage.file_path(:original))).to eq(true)
-    expect(File.exists?(record.image.storage.file_path(:medium))).to eq(true)
+    expect(File.exist?(record.image.storage.file_path(:original))).to eq(true)
+    expect(File.exist?(record.image.storage.file_path(:medium))).to eq(true)
     record.destroy!
-    expect(File.exists?(record.image.storage.file_path(:original))).to eq(false)
-    expect(File.exists?(record.image.storage.file_path(:medium))).to eq(false)
+    expect(File.exist?(record.image.storage.file_path(:original))).to eq(false)
+    expect(File.exist?(record.image.storage.file_path(:medium))).to eq(false)
   end
 
   it "should success to save and delete files on s3" do
