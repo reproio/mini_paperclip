@@ -34,6 +34,7 @@ module MiniPaperclip
       rescue Aws::S3::Errors::NotFound
         false
       end
+      alias_method :exist?, :exists?
 
       def push_delete_file(style)
         @deletes.push({ key: s3_object_key(style) })

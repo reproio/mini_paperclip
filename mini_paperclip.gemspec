@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.description   = %q{Subset from paperclip because paperclip has deprecated}
   spec.homepage      = "https://github.com/reproio/mini_paperclip"
   spec.license       = "MIT"
-  spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
+  spec.required_ruby_version = Gem::Requirement.new(">= 3.0.0")
 
   spec.add_runtime_dependency "mini_magick"
   spec.add_runtime_dependency "mimemagic"

@@ -20,8 +20,9 @@ module MiniPaperclip
       end
 
       def exists?(style)
-        File.exists?(file_path(style))
+        File.exist?(file_path(style))
       end
+      alias_method :exist?, :exists?
 
       def push_delete_file(style)
         @deletes.push(file_path(style))

@@ -4,7 +4,6 @@ require "active_support/core_ext/numeric"
 require "tapp"
 require "rack/test"
 require "webmock/rspec"
-require 'pretty_backtrace'
 
 if ENV['COVERAGE']
   require "coverage"
@@ -28,9 +27,6 @@ end
 
 require "mini_paperclip"
 require "mini_paperclip/shoulda/matchers"
-
-PrettyBacktrace.enable
-PrettyBacktrace.multi_line = true
 
 loglevel = ENV['LOGLEVEL']&.to_sym || :debug
 
