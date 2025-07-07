@@ -1,6 +1,5 @@
 require "bundler/setup"
 require "logger"
-require "sqlite3"
 require "active_record"
 require "active_support/core_ext/numeric"
 require "tapp"
