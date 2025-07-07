@@ -9,11 +9,11 @@ RSpec.describe MiniPaperclip do
       record.save!
       old_file_path = record.image.storage.file_path(:original)
 
-      expect(File.exists?(old_file_path)).to eq(true)
+      expect(File.exist?(old_file_path)).to eq(true)
       new_file = Rack::Test::UploadedFile.new "spec/opaopa.gif", 'image/gif'
       record.image = new_file
       record.save!
-      expect(File.exists?(old_file_path)).to eq(false)
+      expect(File.exist?(old_file_path)).to eq(false)
     end
 
     it "#keep_old_files = true" do
@@ -23,11 +23,11 @@ RSpec.describe MiniPaperclip do
       record.save!
       old_file_path = record.image.storage.file_path(:original)
 
-      expect(File.exists?(old_file_path)).to eq(true)
+      expect(File.exist?(old_file_path)).to eq(true)
       new_file = Rack::Test::UploadedFile.new "spec/opaopa.gif", 'image/gif'
       record.image = new_file
       record.save!
-      expect(File.exists?(old_file_path)).to eq(true)
+      expect(File.exist?(old_file_path)).to eq(true)
     end
 
     it "#hash_data" do

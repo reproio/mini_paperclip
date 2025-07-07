@@ -4,7 +4,6 @@ require "active_support/core_ext/numeric"
 require "tapp"
 require "rack/test"
 require "webmock/rspec"
-require 'pretty_backtrace'
 
 if ENV['COVERAGE']
   require "coverage"
@@ -28,13 +27,6 @@ end
 
 require "mini_paperclip"
 require "mini_paperclip/shoulda/matchers"
-
-# Temporary treatment:
-# gem debug_inspector v0.0.3 does not supported ruby3
-if Object.const_defined?('RubyVM::DebugInspector')
-  PrettyBacktrace.enable
-  PrettyBacktrace.multi_line = true
-end
 
 loglevel = ENV['LOGLEVEL']&.to_sym || :debug
 

@@ -46,6 +46,7 @@ module MiniPaperclip
     def exists?(style = :original)
       file? && @storage.exists?(style)
     end
+    alias_method :exist?, :exists?
 
     def url(style = :original)
       @storage.url_for_read(style)
@@ -125,7 +126,7 @@ module MiniPaperclip
         if !@config.keep_old_files
           do_delete_files
         end
-  
+
       ensure
         if @waiting_write_file.respond_to?(:close!)
           @waiting_write_file.close!

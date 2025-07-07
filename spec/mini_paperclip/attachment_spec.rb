@@ -198,11 +198,11 @@ RSpec.describe MiniPaperclip::Attachment do
     a.process_and_store
 
     path = a.storage.file_path(:original)
-    expect(File.exists?(path)).to eq(true)
+    expect(File.exist?(path)).to eq(true)
     expect(ImageSize.path(path).size.to_s).to eq("490x275")
 
     path = a.storage.file_path(:medium)
-    expect(File.exists?(path)).to eq(true)
+    expect(File.exist?(path)).to eq(true)
     expect(ImageSize.path(path).size.to_s).to eq('18x10')
   end
 
@@ -213,11 +213,11 @@ RSpec.describe MiniPaperclip::Attachment do
     a.process_and_store
 
     path = a.storage.file_path(:original)
-    expect(File.exists?(path)).to eq(true)
+    expect(File.exist?(path)).to eq(true)
     expect(ImageSize.path(path).size.to_s).to eq("490x275")
 
     path = a.storage.file_path(:medium)
-    expect(File.exists?(path)).to eq(true)
+    expect(File.exist?(path)).to eq(true)
     expect(ImageSize.path(path).size.to_s).to eq('20x10')
   end
 
@@ -236,10 +236,10 @@ RSpec.describe MiniPaperclip::Attachment do
     a.process_and_store
 
     path = a.storage.file_path(:original)
-    expect(File.exists?(path)).to eq(true)
+    expect(File.exist?(path)).to eq(true)
     expect(ImageSize.path(path).size.to_s).to eq("490x275")
     path = a.storage.file_path(:medium)
-    expect(File.exists?(path)).to eq(true)
+    expect(File.exist?(path)).to eq(true)
     expect(ImageSize.path(path).size.to_s).to eq('20x10')
 
     b = MiniPaperclip::Attachment.new(Record.new, :image, option)
@@ -247,10 +247,10 @@ RSpec.describe MiniPaperclip::Attachment do
     b.process_and_store
 
     path = b.storage.file_path(:original)
-    expect(File.exists?(path)).to eq(true)
+    expect(File.exist?(path)).to eq(true)
     expect(ImageSize.path(path).size.to_s).to eq("490x275")
     path = b.storage.file_path(:medium)
-    expect(File.exists?(path)).to eq(true)
+    expect(File.exist?(path)).to eq(true)
     expect(ImageSize.path(path).size.to_s).to eq('20x10')
   end
 
@@ -261,11 +261,11 @@ RSpec.describe MiniPaperclip::Attachment do
     a.process_and_store
 
     path = a.storage.file_path(:original)
-    expect(File.exists?(path)).to eq(true)
+    expect(File.exist?(path)).to eq(true)
     expect(ImageSize.path(path).size.to_s).to eq("328x144")
 
     path = a.storage.file_path(:medium)
-    expect(File.exists?(path)).to eq(true)
+    expect(File.exist?(path)).to eq(true)
     expect(ImageSize.path(path).size.to_s).to eq('20x10')
   end
 
