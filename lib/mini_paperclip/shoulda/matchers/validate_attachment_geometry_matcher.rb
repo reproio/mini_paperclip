@@ -97,7 +97,7 @@ module MiniPaperclip
         def create_dummy_image(width:, height:)
           Tempfile.create(['MiniPaperclip::Shoulda::Matchers::ValidateAttachmentGeometryMatcher', ".#{@format}"]) do |f|
             f.binmode
-            MiniMagick::Tool::Convert.new do |convert|
+            MiniMagick.convert do |convert|
               convert.size("#{width}x#{height}")
               convert.xc("none")
               convert.strip

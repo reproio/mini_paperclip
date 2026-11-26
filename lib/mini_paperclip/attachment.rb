@@ -103,7 +103,7 @@ module MiniPaperclip
         @config.styles&.each do |style, size_arg|
           Tempfile.create([style.to_s, File.extname(@waiting_write_file.path)]) do |temp|
             temp.binmode
-            MiniMagick::Tool::Convert.new do |convert|
+            MiniMagick.convert do |convert|
               convert << @waiting_write_file.path
               convert.coalesce if animated?
               convert.auto_orient
@@ -212,7 +212,7 @@ module MiniPaperclip
       if match_data.nil?
         raise UnsupportedError, "attachment for \"#{data_uri[0..100]}\" is not supported"
       end
-      raw = Base64.decode64(match_data[2])
+      raw = match_data[2].unpack1("m")
       @record.write_attribute("#{@attachment_name}_file_name", nil)
       @record.write_attribute("#{@attachment_name}_content_type", strict_content_type(StringIO.new(raw)))
       @record.write_attribute("#{@attachment_name}_file_size", raw.bytesize)

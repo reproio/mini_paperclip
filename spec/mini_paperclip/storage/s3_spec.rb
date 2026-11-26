@@ -27,6 +27,7 @@ RSpec.describe MiniPaperclip::Storage::S3 do
           f.write(file.read)
           f.flush
         }
+        {}
       },
     }) do
       s3.write(:original, file)

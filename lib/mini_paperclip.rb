@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
+require "fileutils"
+require "logger"
+require "open-uri"
 require "openssl"
-require "net/http"
+require "stringio"
+require "tempfile"
 require "active_model/validator"
 require "active_support"
 require "active_support/number_helper"

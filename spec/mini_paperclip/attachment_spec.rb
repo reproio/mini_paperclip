@@ -15,6 +15,7 @@ RSpec.describe MiniPaperclip::Attachment do
       head_object: {content_length: 0},
       put_object: ->(context) {
         context.config[:stub_responses][:head_object][:content_length] = 1
+        {}
       },
     }) do
       a = MiniPaperclip::Attachment.new(record, :image, { storage: :s3, s3_bucket_name: 'bucket' })

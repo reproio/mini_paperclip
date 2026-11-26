@@ -1,7 +1,6 @@
 require "bundler/setup"
 require "active_record"
 require "active_support/core_ext/numeric"
-require "tapp"
 require "rack/test"
 require "webmock/rspec"
 
@@ -111,10 +110,6 @@ def aws_stub_response(stub)
   yield
 ensure
   Aws.config = orig_config
-end
-
-Tapp.configure do |config|
-  config.report_caller = true
 end
 
 RSpec.configure do |config|
