@@ -168,7 +168,7 @@ RSpec.describe MiniPaperclip::Attachment do
     a.assign("data:image/png;base64,#{Base64.strict_encode64(bin)}")
 
     File.open(file_path) do |f|
-      expect(record.image_content_type).to eq(MimeMagic.by_magic(f).type) # ignore Content-Type
+      expect(record.image_content_type).to eq(Marcel::Magic.by_magic(f).type) # ignore Content-Type
       expect(record.image_file_size).to eq(f.size) # ignore Content-Length
     end
     expect(record.image_file_name).to eq(nil)

@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "aws-sdk-s3"
   spec.add_dependency "image_size"
   spec.add_dependency "logger"
-  spec.add_dependency "mimemagic"
+  spec.add_dependency "marcel", ">= 1.0"
   spec.add_dependency "mini_magick", ">= 5.0"
 
   spec.metadata["homepage_uri"] = spec.homepage

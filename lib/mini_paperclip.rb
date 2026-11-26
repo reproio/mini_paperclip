@@ -10,7 +10,7 @@ require "active_model/validator"
 require "active_support"
 require "active_support/number_helper"
 require "mini_magick"
-require "mimemagic"
+require "marcel"
 require "aws-sdk-s3"
 require "image_size"
 

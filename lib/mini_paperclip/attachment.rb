@@ -223,7 +223,7 @@ module MiniPaperclip
 
     def strict_content_type(io)
       io.rewind
-      MimeMagic.by_magic(io)&.type
+      Marcel::Magic.by_magic(io)&.type
     end
 
     def build_tempfile(io)
