@@ -193,10 +193,13 @@ module MiniPaperclip
 
     def assign_http(url)
       # download from url
-      open_uri_option = {
-        read_timeout: MiniPaperclip.config.read_timeout || 60
-      }
       uri = URI.parse(url)
+      unless uri.is_a?(URI::HTTP)
+        raise UnsupportedError, "attachment for \"#{url[0..100]}\" is not supported"
+      end
+      open_uri_option = {
+        read_timeout: @config.read_timeout || 60
+      }
       uri.open(open_uri_option) do |io|
         @record.write_attribute("#{@attachment_name}_file_name", File.basename(uri.path))
         @record.write_attribute("#{@attachment_name}_content_type", strict_content_type(io))

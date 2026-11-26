@@ -11,6 +11,12 @@ RSpec.describe MiniPaperclip::Shoulda::Matchers::ValidateAttachmentGeometryMatch
     expect(matcher.matches?(PresenceRecord)).to eq(true)
   end
 
+  it "#matches? with an attachment not named image" do
+    matcher = MiniPaperclip::Shoulda::Matchers::ValidateAttachmentGeometryMatcher.new(:avatar)
+    matcher.format(:png).width(less_than_or_equal_to: 1000).height(less_than_or_equal_to: 1000)
+    expect(matcher.matches?(AvatarRecord)).to eq(true)
+  end
+
   it "#matches? failed when wrong width" do
     matcher = MiniPaperclip::Shoulda::Matchers::ValidateAttachmentGeometryMatcher.new(:image)
     matcher.format(:png).width(less_than_or_equal_to: -1).height(less_than_or_equal_to: 1000)

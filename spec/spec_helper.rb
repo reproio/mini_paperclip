@@ -73,6 +73,13 @@ ActiveRecord::Base.connection.create_table :zero_records, force: true do |table|
   table.column :image_updated_at, :timestamp
 end
 
+ActiveRecord::Base.connection.create_table :avatar_records, force: true do |table|
+  table.column :avatar_file_name, :string
+  table.column :avatar_file_size, :bigint
+  table.column :avatar_content_type, :string
+  table.column :avatar_updated_at, :timestamp
+end
+
 class NotExtend < ActiveRecord::Base
 end
 
@@ -88,6 +95,16 @@ class PresenceRecord < ActiveRecord::Base
     presence: true,
     content_type: { content_type: ['image/png'] },
     size: { less_than: 1.megabytes },
+    geometry: {
+      width: { less_than_or_equal_to: 1000 },
+      height: { less_than_or_equal_to: 1000 }
+    }
+end
+
+class AvatarRecord < ActiveRecord::Base
+  extend MiniPaperclip::ClassMethods
+  has_attached_file :avatar
+  validates_attachment :avatar,
     geometry: {
       width: { less_than_or_equal_to: 1000 },
       height: { less_than_or_equal_to: 1000 }

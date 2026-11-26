@@ -165,10 +165,10 @@ RSpec.describe MiniPaperclip::Attachment do
     bin = File.read(file_path)
 
     a = MiniPaperclip::Attachment.new(record, :image)
-    a.assign("data:image/png;base64,#{Base64.strict_encode64(bin)}")
+    a.assign("data:image/png;base64,#{[bin].pack("m0")}")
 
     File.open(file_path) do |f|
-      expect(record.image_content_type).to eq(Marcel::Magic.by_magic(f).type) # ignore Content-Type
+      expect(record.image_content_type).to eq('image/jpeg') # ignore Content-Type
       expect(record.image_file_size).to eq(f.size) # ignore Content-Length
     end
     expect(record.image_file_name).to eq(nil)
@@ -182,6 +182,20 @@ RSpec.describe MiniPaperclip::Attachment do
       a.assign("foobar")
     }.to raise_error(MiniPaperclip::Attachment::UnsupportedError)
     expect(record.image_file_name).to eq(nil)
+  end
+
+  it "#assign with string starting with http that is not an http url" do
+    a = MiniPaperclip::Attachment.new(record, :image)
+
+    expect {
+      a.assign("http-cache.png")
+    }.to raise_error(MiniPaperclip::Attachment::UnsupportedError)
+  end
+
+  it "#assign with http url uses the attachment read_timeout" do
+    a = MiniPaperclip::Attachment.new(record, :image, { read_timeout: 5 })
+    expect_any_instance_of(URI::HTTP).to receive(:open).with(hash_including(read_timeout: 5))
+    a.assign("http://www.example.log/a.png")
   end
 
   it "#assign with unsupported object" do
