@@ -1,0 +1,8 @@
+source "https://rubygems.org"
+gemspec path: '../'
+
+# Lowest versions allowed by mini_paperclip.gemspec
+gem 'activerecord', '7.2.0'
+gem 'marcel', '1.0.0'
+gem 'mini_magick', '5.0.0'
+eval_gemfile 'development.gemfile'

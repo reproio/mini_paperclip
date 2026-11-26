@@ -31,6 +31,9 @@ jobs:
           - gemfiles/rails_72.gemfile
           - gemfiles/rails_80.gemfile
           - gemfiles/rails_81.gemfile
+        include:
+          - ruby: "3.3"
+            gemfile: gemfiles/minimum.gemfile
     runs-on: ubuntu-latest
     env:
       BUNDLE_GEMFILE: ${{ matrix.gemfile }}
