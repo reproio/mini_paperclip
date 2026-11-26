@@ -121,6 +121,17 @@ class ZeroRecord < ActiveRecord::Base
     }
 end
 
+def with_bmp_file
+  Tempfile.create(['spec', '.bmp']) do |f|
+    MiniMagick.convert do |convert|
+      convert.size("1x1")
+      convert.xc("red")
+      convert << f.path
+    end
+    yield f
+  end
+end
+
 def aws_stub_response(stub)
   orig_config = Aws.config.dup
   Aws.config[:stub_responses] = stub

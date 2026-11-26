@@ -128,6 +128,14 @@ RSpec.describe MiniPaperclip::Attachment do
     expect(a.waiting_write_file).to_not be_closed
   end
 
+  it "#assign with BMP File" do
+    a = MiniPaperclip::Attachment.new(record, :image)
+    with_bmp_file do |f|
+      a.assign(f)
+      expect(record.image_content_type).to eq('image/bmp')
+    end
+  end
+
   it "#assign with empty string" do
     a = MiniPaperclip::Attachment.new(record, :image)
     file = Rack::Test::UploadedFile.new "spec/paperclip.jpg", 'image/jpeg'

@@ -92,6 +92,14 @@ RSpec.describe MiniPaperclip::ClassMethods do
     expect(record).to be_valid
   end
 
+  it "should valid spoof media type BMP upload when dirty" do
+    with_bmp_file do |f|
+      record.image = Rack::Test::UploadedFile.new(f.path, 'image/bmp')
+      expect(record.image).to be_dirty
+      expect(record).to be_valid
+    end
+  end
+
   it "should valid when not dirty" do
     expect(record.image).to_not be_dirty
     expect(record).to be_valid
