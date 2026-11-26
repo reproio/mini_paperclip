@@ -20,8 +20,7 @@ RSpec.describe MiniPaperclip::ClassMethods do
     MiniPaperclip.config.storage = :s3
     MiniPaperclip.config.s3_bucket_name = 'test'
 
-    Aws.config[:stub_responses] = true
-    Aws.config[:stub_responses] = {
+    aws_stub_response({
       put_object: ->(context) {
         context.config[:stub_responses][:head_object] = { content_length: 1 }
         {}
@@ -33,15 +32,16 @@ RSpec.describe MiniPaperclip::ClassMethods do
         context.config[:stub_responses][:head_object] = fake_error
         { deleted: context.params[:delete][:objects] }
       }
-    }
-    record.image = "data:image/png;base64,#{png_1x1_base64}"
-    record.image_file_name = 'test.png'
-    record.save!
-    expect(record.image.storage.exists?(:original)).to eq(true)
-    expect(record.image.storage.exists?(:medium)).to eq(true)
-    record.destroy!
-    expect(record.image.storage.exists?(:original)).to eq(false)
-    expect(record.image.storage.exists?(:medium)).to eq(false)
+    }) do
+      record.image = "data:image/png;base64,#{png_1x1_base64}"
+      record.image_file_name = 'test.png'
+      record.save!
+      expect(record.image.storage.exists?(:original)).to eq(true)
+      expect(record.image.storage.exists?(:medium)).to eq(true)
+      record.destroy!
+      expect(record.image.storage.exists?(:original)).to eq(false)
+      expect(record.image.storage.exists?(:medium)).to eq(false)
+    end
   ensure
     original_config.each_pair { |k, v| MiniPaperclip.config[k] = v }
   end

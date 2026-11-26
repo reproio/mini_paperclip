@@ -122,7 +122,7 @@ class ZeroRecord < ActiveRecord::Base
 end
 
 def aws_stub_response(stub)
-  orig_config = Aws.config
+  orig_config = Aws.config.dup
   Aws.config[:stub_responses] = stub
   yield
 ensure
