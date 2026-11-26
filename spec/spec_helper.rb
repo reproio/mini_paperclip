@@ -1,7 +1,6 @@
 require "bundler/setup"
 require "active_record"
 require "active_support/core_ext/numeric"
-require "tapp"
 require "rack/test"
 require "webmock/rspec"
 
@@ -74,6 +73,13 @@ ActiveRecord::Base.connection.create_table :zero_records, force: true do |table|
   table.column :image_updated_at, :timestamp
 end
 
+ActiveRecord::Base.connection.create_table :avatar_records, force: true do |table|
+  table.column :avatar_file_name, :string
+  table.column :avatar_file_size, :bigint
+  table.column :avatar_content_type, :string
+  table.column :avatar_updated_at, :timestamp
+end
+
 class NotExtend < ActiveRecord::Base
 end
 
@@ -95,6 +101,16 @@ class PresenceRecord < ActiveRecord::Base
     }
 end
 
+class AvatarRecord < ActiveRecord::Base
+  extend MiniPaperclip::ClassMethods
+  has_attached_file :avatar
+  validates_attachment :avatar,
+    geometry: {
+      width: { less_than_or_equal_to: 1000 },
+      height: { less_than_or_equal_to: 1000 }
+    }
+end
+
 class ZeroRecord < ActiveRecord::Base
   extend MiniPaperclip::ClassMethods
   has_attached_file :image
@@ -105,16 +121,23 @@ class ZeroRecord < ActiveRecord::Base
     }
 end
 
+def with_bmp_file
+  Tempfile.create(['spec', '.bmp']) do |f|
+    MiniMagick.convert do |convert|
+      convert.size("1x1")
+      convert.xc("red")
+      convert << f.path
+    end
+    yield f
+  end
+end
+
 def aws_stub_response(stub)
-  orig_config = Aws.config
+  orig_config = Aws.config.dup
   Aws.config[:stub_responses] = stub
   yield
 ensure
   Aws.config = orig_config
-end
-
-Tapp.configure do |config|
-  config.report_caller = true
 end
 
 RSpec.configure do |config|

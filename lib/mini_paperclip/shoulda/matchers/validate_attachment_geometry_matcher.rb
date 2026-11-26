@@ -43,7 +43,7 @@ module MiniPaperclip
         end
 
         def matches?(subject)
-          @subject = subject.class == Class ? subject.new : subject
+          @subject = subject.is_a?(Class) ? subject.new : subject
 
           unless @format && !@width.empty? && !@height.empty?
             raise CallError, [
@@ -79,7 +79,7 @@ module MiniPaperclip
             @subject.public_send("#{@attachment_name}=", f)
           end
           @subject.valid?
-          @subject.errors.details[:image]&.find { |d| d[:error] == :geometry }.nil?
+          @subject.errors.details[@attachment_name]&.find { |d| d[:error] == :geometry }.nil?
         end
 
         def when_invalid
@@ -87,7 +87,7 @@ module MiniPaperclip
             @subject.public_send("#{@attachment_name}=", f)
           end
           @subject.valid?
-          detail = @subject.errors.details[:image]&.find { |d| d[:error] == :geometry }
+          detail = @subject.errors.details[@attachment_name]&.find { |d| d[:error] == :geometry }
           return false unless detail
           return false unless detail[:expected_width_less_than_or_equal_to] == @width[:less_than_or_equal_to]
           return false unless detail[:expected_height_less_than_or_equal_to] == @height[:less_than_or_equal_to]
@@ -97,7 +97,7 @@ module MiniPaperclip
         def create_dummy_image(width:, height:)
           Tempfile.create(['MiniPaperclip::Shoulda::Matchers::ValidateAttachmentGeometryMatcher', ".#{@format}"]) do |f|
             f.binmode
-            MiniMagick::Tool::Convert.new do |convert|
+            MiniMagick.convert do |convert|
               convert.size("#{width}x#{height}")
               convert.xc("none")
               convert.strip

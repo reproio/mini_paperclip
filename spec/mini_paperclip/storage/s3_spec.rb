@@ -9,8 +9,10 @@ RSpec.describe MiniPaperclip::Storage::S3 do
     ))
     file = double('File')
     allow(file).to receive(:rewind)
-    expect_any_instance_of(Aws::S3::Client).to receive(:put_object)
-    s3.write(:original, file)
+    aws_stub_response(true) do
+      expect_any_instance_of(Aws::S3::Client).to receive(:put_object)
+      s3.write(:original, file)
+    end
   end
 
   it "#open" do
@@ -27,6 +29,7 @@ RSpec.describe MiniPaperclip::Storage::S3 do
           f.write(file.read)
           f.flush
         }
+        {}
       },
     }) do
       s3.write(:original, file)

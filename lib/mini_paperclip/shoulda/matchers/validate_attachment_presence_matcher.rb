@@ -19,7 +19,7 @@ module MiniPaperclip
         end
 
         def matches?(subject)
-          @subject = subject.class == Class ? subject.new : subject
+          @subject = subject.is_a?(Class) ? subject.new : subject
 
           begin
             @subject.write_attribute("#{@attachment_name}_file_name", 'hello.png')

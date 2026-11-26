@@ -15,6 +15,7 @@ RSpec.describe MiniPaperclip::Attachment do
       head_object: {content_length: 0},
       put_object: ->(context) {
         context.config[:stub_responses][:head_object][:content_length] = 1
+        {}
       },
     }) do
       a = MiniPaperclip::Attachment.new(record, :image, { storage: :s3, s3_bucket_name: 'bucket' })
@@ -127,6 +128,14 @@ RSpec.describe MiniPaperclip::Attachment do
     expect(a.waiting_write_file).to_not be_closed
   end
 
+  it "#assign with BMP File" do
+    a = MiniPaperclip::Attachment.new(record, :image)
+    with_bmp_file do |f|
+      a.assign(f)
+      expect(record.image_content_type).to eq('image/bmp')
+    end
+  end
+
   it "#assign with empty string" do
     a = MiniPaperclip::Attachment.new(record, :image)
     file = Rack::Test::UploadedFile.new "spec/paperclip.jpg", 'image/jpeg'
@@ -164,10 +173,10 @@ RSpec.describe MiniPaperclip::Attachment do
     bin = File.read(file_path)
 
     a = MiniPaperclip::Attachment.new(record, :image)
-    a.assign("data:image/png;base64,#{Base64.strict_encode64(bin)}")
+    a.assign("data:image/png;base64,#{[bin].pack("m0")}")
 
     File.open(file_path) do |f|
-      expect(record.image_content_type).to eq(MimeMagic.by_magic(f).type) # ignore Content-Type
+      expect(record.image_content_type).to eq('image/jpeg') # ignore Content-Type
       expect(record.image_file_size).to eq(f.size) # ignore Content-Length
     end
     expect(record.image_file_name).to eq(nil)
@@ -181,6 +190,20 @@ RSpec.describe MiniPaperclip::Attachment do
       a.assign("foobar")
     }.to raise_error(MiniPaperclip::Attachment::UnsupportedError)
     expect(record.image_file_name).to eq(nil)
+  end
+
+  it "#assign with string starting with http that is not an http url" do
+    a = MiniPaperclip::Attachment.new(record, :image)
+
+    expect {
+      a.assign("http-cache.png")
+    }.to raise_error(MiniPaperclip::Attachment::UnsupportedError)
+  end
+
+  it "#assign with http url uses the attachment read_timeout" do
+    a = MiniPaperclip::Attachment.new(record, :image, { read_timeout: 5 })
+    expect_any_instance_of(URI::HTTP).to receive(:open).with(hash_including(read_timeout: 5))
+    a.assign("http://www.example.log/a.png")
   end
 
   it "#assign with unsupported object" do

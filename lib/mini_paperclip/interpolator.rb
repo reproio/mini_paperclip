@@ -29,7 +29,7 @@ module MiniPaperclip
 
     def extension
       attachment.original_filename &&
-        File.extname(attachment.original_filename)[1..-1]
+        File.extname(attachment.original_filename)[1..]
     end
 
     def hash_key(style)

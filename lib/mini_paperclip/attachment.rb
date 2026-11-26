@@ -103,15 +103,16 @@ module MiniPaperclip
         @config.styles&.each do |style, size_arg|
           Tempfile.create([style.to_s, File.extname(@waiting_write_file.path)]) do |temp|
             temp.binmode
-            MiniMagick::Tool::Convert.new do |convert|
+            MiniMagick.convert do |convert|
               convert << @waiting_write_file.path
               convert.coalesce if animated?
               convert.auto_orient
               if size_arg.end_with?('#')
                 # crop option
-                convert.resize("#{size_arg[0..-2]}^")
+                crop_size = size_arg.delete_suffix('#')
+                convert.resize("#{crop_size}^")
                 convert.gravity("center")
-                convert.extent(size_arg[0..-2])
+                convert.extent(crop_size)
               else
                 convert.resize(size_arg)
               end
@@ -192,10 +193,13 @@ module MiniPaperclip
 
     def assign_http(url)
       # download from url
-      open_uri_option = {
-        read_timeout: MiniPaperclip.config.read_timeout || 60
-      }
       uri = URI.parse(url)
+      unless uri.is_a?(URI::HTTP)
+        raise UnsupportedError, "attachment for \"#{url[0..100]}\" is not supported"
+      end
+      open_uri_option = {
+        read_timeout: @config.read_timeout || 60
+      }
       uri.open(open_uri_option) do |io|
         @record.write_attribute("#{@attachment_name}_file_name", File.basename(uri.path))
         @record.write_attribute("#{@attachment_name}_content_type", strict_content_type(io))
@@ -212,7 +216,7 @@ module MiniPaperclip
       if match_data.nil?
         raise UnsupportedError, "attachment for \"#{data_uri[0..100]}\" is not supported"
       end
-      raw = Base64.decode64(match_data[2])
+      raw = match_data[2].unpack1("m")
       @record.write_attribute("#{@attachment_name}_file_name", nil)
       @record.write_attribute("#{@attachment_name}_content_type", strict_content_type(StringIO.new(raw)))
       @record.write_attribute("#{@attachment_name}_file_size", raw.bytesize)
@@ -223,7 +227,7 @@ module MiniPaperclip
 
     def strict_content_type(io)
       io.rewind
-      MimeMagic.by_magic(io)&.type
+      Marcel::Magic.by_magic(io)&.type
     end
 
     def build_tempfile(io)
