@@ -43,7 +43,7 @@ module MiniPaperclip
         end
 
         def matches?(subject)
-          @subject = subject.class == Class ? subject.new : subject
+          @subject = subject.is_a?(Class) ? subject.new : subject
 
           unless @format && !@width.empty? && !@height.empty?
             raise CallError, [

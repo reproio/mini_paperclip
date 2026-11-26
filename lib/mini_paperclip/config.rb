@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module MiniPaperclip
-  class Config < Struct.new(
+  Config = Struct.new(
     :storage,
     :filesystem_path,
     :hash_secret,
@@ -20,7 +20,7 @@ module MiniPaperclip
     :read_timeout,
     :logger,
     keyword_init: true,
-  )
+  ) do
     def merge(hash)
       dup.merge!(hash)
     end

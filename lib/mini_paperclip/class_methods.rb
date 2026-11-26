@@ -51,7 +51,7 @@ module MiniPaperclip
       if !presence.nil?
         validates_with Validators::PresenceValidator, {
           attributes: attachment_name.to_sym,
-          presence: presence,
+          presence:,
           **opts,
         }
       end

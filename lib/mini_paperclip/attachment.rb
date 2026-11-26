@@ -109,9 +109,10 @@ module MiniPaperclip
               convert.auto_orient
               if size_arg.end_with?('#')
                 # crop option
-                convert.resize("#{size_arg[0..-2]}^")
+                crop_size = size_arg.delete_suffix('#')
+                convert.resize("#{crop_size}^")
                 convert.gravity("center")
-                convert.extent(size_arg[0..-2])
+                convert.extent(crop_size)
               else
                 convert.resize(size_arg)
               end

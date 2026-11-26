@@ -10,17 +10,17 @@ module MiniPaperclip
       #   describe User do
       #     it { should have_attached_file(:avatar) }
       #   end
-      def have_attached_file name
+      def have_attached_file(name)
         HaveAttachedFileMatcher.new(name)
       end
 
       class HaveAttachedFileMatcher
-        def initialize attachment_name
+        def initialize(attachment_name)
           @attachment_name = attachment_name
         end
 
-        def matches? subject
-          @subject = subject.class == Class ? subject.new : subject
+        def matches?(subject)
+          @subject = subject.is_a?(Class) ? subject.new : subject
 
           @subject.respond_to?(@attachment_name) &&
             @subject.respond_to?("#{@attachment_name}=") &&
